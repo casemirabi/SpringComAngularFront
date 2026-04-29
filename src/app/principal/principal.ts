@@ -6,4 +6,9 @@ import { Component } from '@angular/core';
   templateUrl: './principal.html',
   styleUrl: './principal.css',
 })
-export class Principal {}
+export class Principal {
+  //  Variavel para visibilidade de botoes
+  btnCadastro: boolean = true;
+}
+
+
