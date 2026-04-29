@@ -5,10 +5,10 @@
     <input type="number" placeholder="Idade" class="form-control" name="idade" [(ngModel)]="cliente.idade">
     <input type="text" placeholder="Cidade" class="form-control" name="cidade" [(ngModel)]="cliente.cidade">
 
-    <input type="button" value="Cadastrar" class="btn btn-primary" (click)="cadastrar()">
-    <input type="button" value="Atualizar" class="btn btn-warning">
-    <input type="button" value="Remover" class="btn btn-danger">
-    <input type="button" value="Cancelar" class="btn btn-secondary">
+    <input type="button" value="Cadastrar" *ngIf="btnCadastro" class="btn btn-primary" (click)="cadastrar()">
+    <input type="button" value="Atualizar" *ngIf="!btnCadastro" class="btn btn-warning">
+    <input type="button" value="Remover" *ngIf="!btnCadastro" class="btn btn-danger">
+    <input type="button" value="Cancelar" *ngIf="!btnCadastro" class="btn btn-secondary">
 </form>
 
 <table class="table">
@@ -21,5 +21,15 @@
             <th>Seleção</th>
         </tr>
     </thead>
-    <tbody></tbody>
+    <tbody>
+        <tr *ngFor="let c of clientes; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ c.nome }}</td>
+            <td>{{ c.idade }}</td>
+            <td>{{ c.cidade }}</td>
+            <td>
+                <button class="btn btn-info" (click)="selecionar(i)">Selecionar</button>
+            </td>
+        </tr>
+    </tbody>
 </table>
