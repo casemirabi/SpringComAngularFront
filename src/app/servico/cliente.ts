@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';[]
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Cliente } from '../modelo/Cliente';
 
@@ -19,8 +19,15 @@ export class ClienteService {
   selecionar(): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(this.url);
   }
-
+  
+  //  Metodo para cadastrar clientes
   cadastrar(obj: Cliente): Observable<Cliente> {
     return this.http.post<Cliente>(this.url, obj);
   }
+
+  //  Metodo para editar clientes
+  editar(obj:Cliente):Observable<Cliente>{
+    return this.http.put<Cliente>(this.url, obj);
+  }
+
 }

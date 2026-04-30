@@ -1,46 +1,103 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { Cliente } from '../modelo/Cliente';
 import { ClienteService } from '../servico/cliente';
-import { Observable } from 'rxjs';
 
+import { provideHttpClient } from '@angular/common/http';
+export const appConfig = {
+  providers: [
+    provideHttpClient()
+  ]
+};
 
 @Component({
   selector: 'app-principal',
   imports: [
     FormsModule,
-    CommonModule,
-    HttpClientModule
+    CommonModule
   ],
   templateUrl: './principal.html',
   styleUrl: './principal.css',
 })
-export class Principal {
+export class Principal implements OnInit {
 
   // Controla a visibilidade dos botões
   btnCadastro: boolean = true;
 
+  //  Variável para visibilidade da tabela
+  tabela: boolean = true;
+
   // Objeto usado no formulário
   cliente: Cliente = new Cliente();
 
-  // Lista de clientes exibida na tela | Vetor - Json com dados retornados da API
+  // Lista de clientes exibida na tela
   clientes: Cliente[] = [];
 
   // Índice do cliente selecionado
   indice: number = -1;
 
-  // Injeta o service responsável pelas chamadas HTTP
-  constructor(private servico: ClienteService) { }
+  // Injeta o service e o detector de mudanças da tela
+  constructor(
+    private servico: ClienteService,
+    private detectorMudancas: ChangeDetectorRef
+  ) { }
 
+  //  Método para selecionar um cliente específico
+  selecionarCliente(posicao: number): void {
+
+    //  Selecionar cliente no vetor
+    this.cliente = this.clientes[posicao]
+
+    //  Visibilidade dos botoes
+    this.btnCadastro = false;
+
+    //  Visibilidade da tabela
+    this.tabela = false;
+  }
+
+  //  Metodo para editar clientes
+  editar(): void {
+    this.servico.editar(this.cliente)
+      .subscribe(retorno => {
+
+        //  Obter a posicao do cliente
+        let posicao = this.clientes.findIndex(
+          obj => {
+            return obj.codigo == retorno.codigo;
+          });
+
+        //  Alterar os dados do cliente no vetor
+        this.clientes[posicao] = retorno;
+
+        // Limpa o formulário
+        this.cliente = new Cliente();
+        
+        //Visibilidade dos botoes
+        this.btnCadastro = true;
+
+        //Visibilidade dos botoes
+        this.tabela = true;
+
+
+      });
+  }
+
+  // Método executado ao carregar o componente
+  ngOnInit(): void {
+    this.selecionas();
+  }
 
   // Busca os clientes na API
   selecionas(): void {
     this.servico.selecionar().subscribe({
       next: (retorno: Cliente[]) => {
         console.log('Clientes recebidos da API:', retorno);
+
         this.clientes = retorno;
+
+        // Força a tela a atualizar a tabela
+        this.detectorMudancas.detectChanges();
       },
       error: (erro) => {
         console.error('Erro ao buscar clientes:', erro);
@@ -48,30 +105,24 @@ export class Principal {
     });
   }
 
-  //  Método de cadastro
+  // Cadastra cliente na API
   cadastrar(): void {
-    this.servico.cadastrar(this.cliente)
-      .subscribe(retorno => { this.clientes.push(retorno); });
+    this.servico.cadastrar(this.cliente).subscribe({
+      next: (retorno: Cliente) => {
+        // Adiciona na tabela
+        this.clientes.push(retorno);
+
+        // Limpa o formulário
+        this.cliente = new Cliente();
+
+        // Força a tela a atualizar os inputs
+        this.detectorMudancas.detectChanges();
+
+        alert('Cliente cadastrado com sucesso!');
+      },
+      error: (erro) => {
+        console.error('Erro ao cadastrar cliente:', erro);
+      }
+    });
   }
-
-  //  Metodo de inicialização
-  ngOnInit() {
-    this.selecionas();
-  }
-
-  // Cadastra um cliente localmente na lista
-  /*cadastrar(): void {
-    this.clientes.push(this.cliente);
-  
-    console.log('Lista de clientes:', this.clientes);
-    console.log('Cliente cadastrado:', this.cliente);
-  
-    // Limpa o formulário
-    this.cliente = new Cliente();
-  }*/
-
-
-
-
-
 }
