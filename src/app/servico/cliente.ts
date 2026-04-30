@@ -9,14 +9,18 @@ import { Cliente } from '../modelo/Cliente';
 export class ClienteService {
 
   //  URL da API
-  private url:string = 'http://localhost:8080';
+  private url: string = 'http://localhost:8080';
 
-  constructor(private http:HttpClient){
+  constructor(private http: HttpClient) {
 
   }
 
   //  Método para selecionar todos os clientes
-  selecionar():Observable<Cliente[]>{
+  selecionar(): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(this.url);
+  }
+
+  cadastrar(obj: Cliente): Observable<Cliente> {
+    return this.http.post<Cliente>(this.url, obj);
   }
 }

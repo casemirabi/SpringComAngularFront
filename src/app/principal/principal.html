@@ -8,7 +8,7 @@
     <input type="text" placeholder="Cidade" class="form-control" [(ngModel)]="cliente.cidade" name="cidade" [(ngModel)]="cliente.cidade">
 
     @if(btnCadastro){
-    <input type="button" value="Cadastrar" *ngIf="btnCadastro" class="btn btn-primary" (click)="cadastrar()">
+    <input type="button" value="Cadastrar" *ngIf="btnCadastro" class="btn btn-primary" (click)="cadastrar()" (click)="cadastrar()">
     }
     <input type="button" value="Atualizar" *ngIf="!btnCadastro" class="btn btn-warning">
     <input type="button" value="Remover" *ngIf="!btnCadastro" class="btn btn-danger">
@@ -25,8 +25,6 @@
             <th>Seleção</th>
         </tr>
     </thead>
-
-<h1>{{cliente | json}}</h1>
 
     <tbody>
         <tr *ngFor="let c of clientes; let i = index">

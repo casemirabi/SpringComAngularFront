@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Cliente } from '../modelo/Cliente';
 import { ClienteService } from '../servico/cliente';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { ClienteService } from '../servico/cliente';
   styleUrl: './principal.css',
 })
 export class Principal {
- 
+
   // Controla a visibilidade dos botões
   btnCadastro: boolean = true;
 
@@ -33,16 +34,6 @@ export class Principal {
   // Injeta o service responsável pelas chamadas HTTP
   constructor(private servico: ClienteService) { }
 
-  // Cadastra um cliente localmente na lista
-  cadastrar(): void {
-    this.clientes.push(this.cliente);
-
-    console.log('Lista de clientes:', this.clientes);
-    console.log('Cliente cadastrado:', this.cliente);
-
-    // Limpa o formulário
-    this.cliente = new Cliente();
-  }
 
   // Busca os clientes na API
   selecionas(): void {
@@ -57,19 +48,30 @@ export class Principal {
     });
   }
 
+  //  Método de cadastro
+  cadastrar(): void {
+    this.servico.cadastrar(this.cliente)
+      .subscribe(retorno => { this.clientes.push(retorno); });
+  }
+
   //  Metodo de inicialização
   ngOnInit() {
     this.selecionas();
   }
 
-  // Seleciona um cliente da tabela
-  /*selecionar(indice: number): void {
-    this.indice = indice;
-
-    // Copia os dados do cliente selecionado para o formulário
-    this.cliente = { ...this.clientes[indice] };
-
-    // Controla visibilidade dos botões
-    this.btnCadastro = false;
+  // Cadastra um cliente localmente na lista
+  /*cadastrar(): void {
+    this.clientes.push(this.cliente);
+  
+    console.log('Lista de clientes:', this.clientes);
+    console.log('Cliente cadastrado:', this.cliente);
+  
+    // Limpa o formulário
+    this.cliente = new Cliente();
   }*/
+
+
+
+
+
 }
