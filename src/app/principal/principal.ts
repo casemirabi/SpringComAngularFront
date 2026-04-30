@@ -72,16 +72,46 @@ export class Principal implements OnInit {
 
         // Limpa o formulário
         this.cliente = new Cliente();
-        
+
         //Visibilidade dos botoes
         this.btnCadastro = true;
 
         //Visibilidade dos botoes
         this.tabela = true;
 
+        alert("Cliente editado com sucesso!");
 
       });
+
   }
+
+  //  Metodo para remover clientes
+  remover(): void {
+    this.servico.remover(this.cliente.codigo)
+      .subscribe(retorno => {
+
+        //  Obter a posicao do cliente
+        let posicao = this.clientes.findIndex(
+          obj => {
+            return obj.codigo == this.cliente.codigo;
+          });
+
+        //  Remover cliente do vetor
+        this.clientes.splice(posicao, 1);
+
+        // Limpa o formulário
+        this.cliente = new Cliente();
+
+        //Visibilidade dos botoes
+        this.btnCadastro = true;
+
+        //Visibilidade dos botoes
+        this.tabela = true;
+
+        alert("Cliente removido com sucesso!");
+      });
+  }
+
 
   // Método executado ao carregar o componente
   ngOnInit(): void {
