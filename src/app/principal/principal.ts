@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Cliente } from '../modelo/Cliente';
 import { ClienteService } from '../servico/cliente';
 
+
 @Component({
   selector: 'app-principal',
   imports: [
@@ -16,21 +17,21 @@ import { ClienteService } from '../servico/cliente';
   styleUrl: './principal.css',
 })
 export class Principal {
-
+ 
   // Controla a visibilidade dos botões
   btnCadastro: boolean = true;
 
   // Objeto usado no formulário
   cliente: Cliente = new Cliente();
 
-  // Lista de clientes exibida na tela
+  // Lista de clientes exibida na tela | Vetor - Json com dados retornados da API
   clientes: Cliente[] = [];
 
   // Índice do cliente selecionado
   indice: number = -1;
 
   // Injeta o service responsável pelas chamadas HTTP
-  constructor(private servico: ClienteService) {}
+  constructor(private servico: ClienteService) { }
 
   // Cadastra um cliente localmente na lista
   cadastrar(): void {
@@ -47,6 +48,7 @@ export class Principal {
   selecionas(): void {
     this.servico.selecionar().subscribe({
       next: (retorno: Cliente[]) => {
+        console.log('Clientes recebidos da API:', retorno);
         this.clientes = retorno;
       },
       error: (erro) => {
@@ -55,8 +57,13 @@ export class Principal {
     });
   }
 
+  //  Metodo de inicialização
+  ngOnInit() {
+    this.selecionas();
+  }
+
   // Seleciona um cliente da tabela
-  selecionar(indice: number): void {
+  /*selecionar(indice: number): void {
     this.indice = indice;
 
     // Copia os dados do cliente selecionado para o formulário
@@ -64,5 +71,5 @@ export class Principal {
 
     // Controla visibilidade dos botões
     this.btnCadastro = false;
-  }
+  }*/
 }

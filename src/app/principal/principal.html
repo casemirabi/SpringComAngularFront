@@ -6,7 +6,7 @@
     <input type="text" placeholder="Cidade" class="form-control" name="cidade" [(ngModel)]="cliente.cidade">
 
     @if(btnCadastro){
-        <input type="button" value="Cadastrar" *ngIf="btnCadastro" class="btn btn-primary" (click)="cadastrar()">
+    <input type="button" value="Cadastrar" *ngIf="btnCadastro" class="btn btn-primary" (click)="cadastrar()">
     }
     <input type="button" value="Atualizar" *ngIf="!btnCadastro" class="btn btn-warning">
     <input type="button" value="Remover" *ngIf="!btnCadastro" class="btn btn-danger">
@@ -23,15 +23,16 @@
             <th>Seleção</th>
         </tr>
     </thead>
+
+<h1>{{cliente | json}}</h1>
+
     <tbody>
         <tr *ngFor="let c of clientes; let i = index">
             <td>{{ i + 1 }}</td>
             <td>{{ c.nome }}</td>
             <td>{{ c.idade }}</td>
             <td>{{ c.cidade }}</td>
-            <td>
-                <button class="btn btn-info" (click)="selecionar(i)">Selecionar</button>
-            </td>
+            <td><button class="btn btn-success">Selecionar</button></td>
         </tr>
     </tbody>
 </table>
