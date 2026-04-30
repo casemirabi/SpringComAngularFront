@@ -112,6 +112,13 @@ export class Principal implements OnInit {
       });
   }
 
+  //  Metodo para cancelar
+  cancelar():void{
+    this.cliente = new Cliente();
+    this.btnCadastro = true;
+    this.tabela = true;
+  }
+
 
   // Método executado ao carregar o componente
   ngOnInit(): void {
