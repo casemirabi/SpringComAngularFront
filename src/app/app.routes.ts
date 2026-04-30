@@ -4,11 +4,11 @@ import { Principal } from './principal/principal';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'principal',
-    pathMatch: 'full'
+    component: Principal
+    
   },
-  {
+ /* {
     path: 'principal',
     component: Principal
-  }
+  }*/
 ];
