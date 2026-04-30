@@ -2,66 +2,67 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { Cliente } from '../modelo/Cliente';
+import { ClienteService } from '../servico/cliente';
 
 @Component({
   selector: 'app-principal',
   imports: [
-    // FormsModule permite usar [(ngModel)] no HTML
     FormsModule,
     CommonModule,
     HttpClientModule
   ],
   templateUrl: './principal.html',
   styleUrl: './principal.css',
-
 })
 export class Principal {
-  //  Variavel para visibilidade de botoes
+
+  // Controla a visibilidade dos botões
   btnCadastro: boolean = true;
 
-  // Model: objeto que representa os dados do formulário
-  cliente = {
-    nome: '',
-    idade: null as number | null,
-    cidade: ''
-  };
+  // Objeto usado no formulário
+  cliente: Cliente = new Cliente();
 
-  // Model: lista de clientes (simula banco)
-  clientes: any[] = [];
+  // Lista de clientes exibida na tela
+  clientes: Cliente[] = [];
 
   // Índice do cliente selecionado
   indice: number = -1;
 
-  // Controller: função chamada ao clicar no botão
+  // Injeta o service responsável pelas chamadas HTTP
+  constructor(private servico: ClienteService) {}
+
+  // Cadastra um cliente localmente na lista
   cadastrar(): void {
-    // Adiciona o cliente na lista
-    this.clientes.push({ ...this.cliente });
+    this.clientes.push(this.cliente);
 
     console.log('Lista de clientes:', this.clientes);
+    console.log('Cliente cadastrado:', this.cliente);
 
-    // Exibe o objeto completo no console
-    console.log('Cliente cadastrado: ', this.cliente);
-
-    // Limpa o formulário (boa prática)
-    this.cliente = {
-      nome: '',
-      idade: null,
-      cidade: ''
-    };
-
-
-
+    // Limpa o formulário
+    this.cliente = new Cliente();
   }
-  // Controller: selecionar cliente da tabela
+
+  // Busca os clientes na API
+  selecionas(): void {
+    this.servico.selecionar().subscribe({
+      next: (retorno: Cliente[]) => {
+        this.clientes = retorno;
+      },
+      error: (erro) => {
+        console.error('Erro ao buscar clientes:', erro);
+      }
+    });
+  }
+
+  // Seleciona um cliente da tabela
   selecionar(indice: number): void {
     this.indice = indice;
 
-    // Preenche o formulário com os dados
-    this.cliente = this.clientes[indice];
+    // Copia os dados do cliente selecionado para o formulário
+    this.cliente = { ...this.clientes[indice] };
 
     // Controla visibilidade dos botões
     this.btnCadastro = false;
   }
 }
-
-
