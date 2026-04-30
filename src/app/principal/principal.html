@@ -1,9 +1,11 @@
 <form action="">
 
     <img src="cliente.png">
-    <input type="text" placeholder="Nome" class="form-control" name="nome" [(ngModel)]="cliente.nome">
-    <input type="number" placeholder="Idade" class="form-control" name="idade" [(ngModel)]="cliente.idade">
-    <input type="text" placeholder="Cidade" class="form-control" name="cidade" [(ngModel)]="cliente.cidade">
+    <input type="text" placeholder="Nome" class="form-control" [(ngModel)]="cliente.nome" name="nome" [(ngModel)]="cliente.nome">
+    
+    <input type="number" placeholder="Idade" class="form-control" [(ngModel)]="cliente.idade" name="idade" [(ngModel)]="cliente.idade">
+    
+    <input type="text" placeholder="Cidade" class="form-control" [(ngModel)]="cliente.cidade" name="cidade" [(ngModel)]="cliente.cidade">
 
     @if(btnCadastro){
     <input type="button" value="Cadastrar" *ngIf="btnCadastro" class="btn btn-primary" (click)="cadastrar()">
